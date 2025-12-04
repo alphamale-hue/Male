@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Video Player</title>
+	
+	<style>
+		body {
+			margin: 0;
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+			font-family: 'Poppins', sans-serif;
+			background: linear-gradient(135deg, #0d0d0f, #1d1d24);
+			color: white;
+		}
+		
+		.content {
+			flex: 1;
+			padding: 40px 0;
+			text-align: center;
+		}
+		
+		/* SMALL RECTANGLE */
+		.video-box {
+			width: 95%;
+			max-width: 380px;
+			margin: 0 auto;
+			background: rgba(255, 255, 255, 0.05);
+			padding: 12px;
+			border-radius: 12px;
+			border: 1px solid rgba(255, 255, 255, 0.1);
+		}
+		
+		.video-box video {
+			width: 100%;
+			aspect-ratio: 16 / 9;
+			object-fit: contain;
+			background: black;
+			border-radius: 12px;
+			display: block;
+		}
+
+		/* ⭐ Pornhub iframe style (ADDED) */
+		.ph-iframe {
+			width: 100%;
+			aspect-ratio: 16/9;
+			border: none;
+			border-radius: 12px;
+			background: black;
+		}
+		
+		footer {
+			padding: 15px;
+			text-align: center;
+			border-top: 1px solid rgba(255, 255, 255, 0.1);
+			opacity: 0.7;
+		}
+	</style>
+</head>
+
+<body>
+	
+	<div class="content">
+		<h2>Desi MMS - alpha</h2>
+		
+		<div class="video-box">
+			<video controls controlsList="nodownload" oncontextmenu="return false">
+				<source src="" type="video/mp4">
+				Your browser does not support the video tag.
+			</video>
+
+			<!-- ⭐ Pornhub Iframe Placeholder (ADDED, hidden by default) -->
+			<iframe id="phFrame" class="ph-iframe" style="display:none;"></iframe>
+		</div>
+	</div>
+	
+	<footer>
+		© 2025 Made With ❤️ By alpha
+	</footer>
+	
+	<!-- 🚀 GOOGLE SHEET + DIRECT JSON LOADER -->
+	<script>
+		// 🔥 Your Google Sheet JSON (Opensheet)
+		const sheetJSON = "https://opensheet.elk.sh/1X7APX7W-PvOF7p2XFmeP91-o9Cx3HLAY7xDwYl2sOds/Sheet1";
+
+		// Read ID from URL: ?id=sha62d16gh
+		const params = new URLSearchParams(window.location.search);
+		const pageID = params.get("id");
+
+		if (!pageID) {
+			alert("Error: Missing video ID");
+		}
+
+		// Fetch JSON sheet
+		fetch(sheetJSON)
+			.then(res => res.json())
+			.then(data => {
+
+				const match = data.find(row => row.id === pageID);
+
+				if (!match) {
+					alert("Video not found for ID: " + pageID);
+					return;
+				}
+
+				// ⭐ CHECK IF LINK IS PORNHUB EMBED
+				if (match.video.includes("pornhub.com/embed")) {
+
+					// Hide original video player
+					document.querySelector("video").style.display = "none";
+
+					// Load Pornhub embed
+					const ph = document.getElementById("phFrame");
+					ph.src = match.video;
+					ph.style.display = "block";
+
+					return;
+				}
+
+				// Load normal MP4 video
+				document.querySelector("video source").src = match.video;
+				document.querySelector("video").load();
+			});
+	</script>
+	
+</body>
+
+</html>
