@@ -43,7 +43,7 @@
 			display: block;
 		}
 
-		/* ⭐ Pornhub iframe style (ADDED) */
+		/* ⭐ Iframe style (ADDED) */
 		.ph-iframe {
 			width: 100%;
 			aspect-ratio: 16/9;
@@ -72,8 +72,8 @@
 				Your browser does not support the video tag.
 			</video>
 
-			<!-- ⭐ Pornhub Iframe Placeholder (ADDED, hidden by default) -->
-			<iframe id="phFrame" class="ph-iframe" style="display:none;"></iframe>
+			<!-- ⭐ Iframe Placeholder (ADDED, hidden by default) -->
+			<iframe id="phFrame" class="ph-iframe" style="display:none;" allowfullscreen></iframe>
 		</div>
 	</div>
 	
@@ -109,10 +109,20 @@
 				// ⭐ CHECK IF LINK IS PORNHUB EMBED
 				if (match.video.includes("pornhub.com/embed")) {
 
-					// Hide original video player
 					document.querySelector("video").style.display = "none";
 
-					// Load Pornhub embed
+					const ph = document.getElementById("phFrame");
+					ph.src = match.video;
+					ph.style.display = "block";
+
+					return;
+				}
+
+				// ⭐ CHECK IF LINK IS STREAMHLS EMBED
+				if (match.video.includes("streamhls.to")) {
+
+					document.querySelector("video").style.display = "none";
+
 					const ph = document.getElementById("phFrame");
 					ph.src = match.video;
 					ph.style.display = "block";
